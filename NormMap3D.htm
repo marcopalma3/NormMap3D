@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Marco Palma">
+<meta name="dcterms.date" content="2024-08-08">
+
+<title>Normative brain mapping of 3-dimensional morphometry imaging data using skewed functional data analysis</title>
+<style class="anchorjs"></style><style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="NormMap3D_files/clipboard.min.js"></script>
+<script src="NormMap3D_files/quarto.js"></script>
+<script src="NormMap3D_files/popper.min.js"></script>
+<script src="NormMap3D_files/tippy.umd.min.js"></script>
+<script src="NormMap3D_files/anchor.min.js"></script>
+<link href="NormMap3D_files/tippy.css" rel="stylesheet">
+<link href="NormMap3D_files/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="NormMap3D_files/bootstrap.min.js"></script>
+<link href="NormMap3D_files/bootstrap-icons.css" rel="stylesheet">
+<link href="NormMap3D_files/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="NormMap3D_files/htmlwidgets.js"></script>
+<script src="NormMap3D_files/viz.js"></script>
+<link href="NormMap3D_files/styles.css" rel="stylesheet">
+<script src="NormMap3D_files/grViz.js"></script>
+
+  <script src="NormMap3D_files/tex-chtml-full.js" type="text/javascript"></script><style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style>
+
+<style id="MJX-CHTML-styles">
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-mi {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-stretchy-h > * {
+  display: table-cell;
+  width: 0;
+}
+
+mjx-stretchy-h > * > mjx-c {
+  display: inline-block;
+  transform: scalex(1.0000001);
+}
+
+mjx-stretchy-h > * > mjx-c::before {
+  display: inline-block;
+  width: initial;
+}
+
+mjx-stretchy-h > mjx-ext {
+  /* IE */ overflow: hidden;
+  /* others */ overflow: clip visible;
+  width: 100%;
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c::before {
+  transform: scalex(500);
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c {
+  width: 0;
+}
+
+mjx-stretchy-h > mjx-beg > mjx-c {
+  margin-right: -.1em;
+}
+
+mjx-stretchy-h > mjx-end > mjx-c {
+  margin-left: -.1em;
+}
+
+mjx-stretchy-v {
+  display: inline-block;
+}
+
+mjx-stretchy-v > * {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-beg {
+  height: 0;
+}
+
+mjx-stretchy-v > mjx-end > mjx-c {
+  display: block;
+}
+
+mjx-stretchy-v > * > mjx-c {
+  transform: scaley(1.0000001);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+mjx-stretchy-v > mjx-ext {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  /* IE */ overflow: hidden;
+  /* others */ overflow: visible clip;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c::before {
+  width: initial;
+  box-sizing: border-box;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c {
+  transform: scaleY(500) translateY(.075em);
+  overflow: visible;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0px;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c1D449.TEX-I::before {
+  padding: 0.683em 0.769em 0.022em 0;
+  content: "V";
+}
+
+mjx-c.mjx-c2217::before {
+  padding: 0.465em 0.5em 0 0;
+  content: "\2217";
+}
+</style></head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-full">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#import-data" id="toc-import-data" class="nav-link" data-scroll-target="#import-data">Import data</a></li>
+  <li><a href="#create-training-set" id="toc-create-training-set" class="nav-link" data-scroll-target="#create-training-set">Create training set</a></li>
+  <li><a href="#select-grid-for-efficient-computation" id="toc-select-grid-for-efficient-computation" class="nav-link" data-scroll-target="#select-grid-for-efficient-computation">Select grid for efficient computation</a></li>
+  <li><a href="#workflow-of-the-analysis" id="toc-workflow-of-the-analysis" class="nav-link" data-scroll-target="#workflow-of-the-analysis">Workflow of the analysis</a>
+  <ul class="collapse">
+  <li><a href="#radial-basis-functions" id="toc-radial-basis-functions" class="nav-link" data-scroll-target="#radial-basis-functions">Radial basis functions</a></li>
+  <li><a href="#association-with-age-and-sex" id="toc-association-with-age-and-sex" class="nav-link" data-scroll-target="#association-with-age-and-sex">Association with age and sex</a></li>
+  </ul></li>
+  <li><a href="#compute-z-maps" id="toc-compute-z-maps" class="nav-link" data-scroll-target="#compute-z-maps">Compute z-maps</a>
+  <ul class="collapse">
+  <li><a href="#indices-of-abnormality" id="toc-indices-of-abnormality" class="nav-link" data-scroll-target="#indices-of-abnormality">Indices of abnormality</a></li>
+  </ul></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content column-page-left" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Normative brain mapping of 3-dimensional morphometry imaging data using skewed functional data analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Marco Palma </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 8, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This is the code for the paper “Normative brain mapping of 
+3-dimensional morphometry imaging data using skewed functional data 
+analysis” by Palma et al., available as a preprint on <a href="https://arxiv.org/abs/2407.05806">arxiv</a>.</p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<section id="r-packages" class="level3">
+<h3 class="anchored" data-anchor-id="r-packages">R packages<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#r-packages" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pacman)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">p_load</span>(bigmemory, bigstatsr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">p_load</span>(ggplot2, magrittr, fda, pipeR, ggcorrplot, dplyr,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       sjlabelled)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">p_load</span>(knitr, knitrProgressBar, glmnet)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">p_load</span>(oro.nifti, neurobase, nortest, mgcv, ROCR)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">p_load</span>(sn, sp, e1071, FRK)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"slices_plot.R"</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">20</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">'%ni%'</span> <span class="ot">&lt;-</span> <span class="fu">Negate</span>(<span class="st">'%in%'</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="import-data" class="level1">
+<h1>Import data</h1>
+<section id="masking" class="level3">
+<h3 class="anchored" data-anchor-id="masking">Masking<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#masking" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+<p>We import the mask file. Then, we take the MDT (minimal deformation 
+template, the common template for the TBM images), we apply the mask on 
+it and drop the empty dimensions of the array (i.e., those containing 
+all zeros).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mask <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"smoothed_mask_125.nii.gz"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">readNIfTI</span>(<span class="at">fname =</span> .)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fn <span class="ot">=</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"ADNI_ICBM9P_mni_4step_MDT.img"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>dimscan <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">220</span>,<span class="dv">220</span>,<span class="dv">220</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>img_template <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">readBin</span>(fn, <span class="at">what =</span> <span class="st">"int"</span>, <span class="at">n =</span> <span class="fu">prod</span>(dimscan), </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                              <span class="at">size =</span> <span class="dv">2</span>, <span class="at">signed =</span> <span class="cn">FALSE</span>), </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">dim =</span> dimscan)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>template_resized <span class="ot">&lt;-</span> <span class="fu">mask_img</span>(img_template, mask, <span class="at">allow.NA =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dropEmptyImageDimensions</span>(., <span class="at">value =</span> <span class="dv">0</span>, <span class="at">threshold =</span> <span class="dv">0</span>, <span class="at">reorient =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>dims_mask <span class="ot">&lt;-</span> <span class="fu">dim</span>(template_resized)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>voxel_active <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">as.vector</span>(template_resized) <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>LVA <span class="ot">&lt;-</span> <span class="fu">length</span>(voxel_active)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The dimensions for the images are now 151, 189, 145 and the number of voxels within the mask is 2019941.</p>
+</section>
+<section id="loading-the-tbm-images" class="level3">
+<h3 class="anchored" data-anchor-id="loading-the-tbm-images">Loading the TBM images<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#loading-the-tbm-images" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+<p>Now it is time to load the TBM images (we recommend to do it on a cluster): you can run the script <code>import_masked_images.R</code>
+ to apply the mask on each image and return a vector with TBM values for
+ the voxels within the mask. Alternatively, you can run the script <code>project_TBM_fast.R</code> to return the coefficients of a basis representation (e.g.&nbsp;B-splines) for each image. <strong>Please note:</strong> you need to specify the path to the mask and TBM images, and for the <code>project_TBM_fast.R</code> you need to provide as input a design matrix with the basis functions (which you can build using <a href="https://github.com/marcopalma3/neurofundata/blob/master/R/calc_projection_Bspl.R">this function on my package neurofundata</a>).</p>
+</section>
+</section>
+<section id="create-training-set" class="level1">
+<h1>Create training set</h1>
+<p>We will fit our models on a subset of the imaging dataset. First, we open the <a href="https://adni.bitbucket.io/">ADNIMERGE</a> dataset and we select the 817 subjects for which we have the TBM image.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ADNIMERGE"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ADNI_Dx <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"ADNI1_subjects.xlsx"</span>), <span class="at">sheet =</span> <span class="dv">1</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>data_ADNI <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span>(ADNIMERGE<span class="sc">::</span>adnimerge, <span class="st">"RID"</span>, <span class="st">"PTID"</span>, <span class="st">"VISCODE"</span>, <span class="st">"AGE"</span>, <span class="st">"PTGENDER"</span>, <span class="st">"MMSE"</span>, <span class="st">"ADAS13.bl"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  sjlabelled<span class="sc">::</span><span class="fu">remove_all_labels</span>(.)   <span class="do">###,"PTEDUCAT", "PTETHCAT", "PTRACCAT")</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>data_ADNI_bl_817 <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(<span class="fu">filter</span>(data_ADNI, VISCODE<span class="sc">==</span> <span class="st">"bl"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  sjlabelled<span class="sc">::</span><span class="fu">remove_all_labels</span>(.) <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(., ADNI_Dx) <span class="sc">%&gt;%</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>VISCODE)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>data_ADNI_bl_817 <span class="ot">&lt;-</span> sjlabelled<span class="sc">::</span><span class="fu">remove_all_labels</span>(data_ADNI_bl_817)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>data_ADNI_bl_817<span class="sc">$</span>PTGENDERMale <span class="ot">&lt;-</span> <span class="fu">with</span>(data_ADNI_bl_817,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                                      <span class="fu">ifelse</span>(PTGENDER <span class="sc">==</span> <span class="st">"Male"</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.factor</span>(.)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>data_ADNI_bl_817<span class="sc">$</span>Dx <span class="ot">&lt;-</span> <span class="fu">ordered</span>(data_ADNI_bl_817<span class="sc">$</span>Dx, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"N"</span>,<span class="st">"MCI"</span>,<span class="st">"AD"</span>))</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">all.equal</span>(sjlabelled<span class="sc">::</span><span class="fu">remove_all_labels</span>(data_ADNI_bl_817<span class="sc">$</span>PTID), data_ADNI_bl_817<span class="sc">$</span>Subject)){</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  data_ADNI_bl_817 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span>(data_ADNI_bl_817, <span class="sc">-</span>Subject)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>}  <span class="do">### check that PTID and Subject are the same</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>normal_PTID <span class="ot">&lt;-</span> sjlabelled<span class="sc">::</span><span class="fu">remove_all_labels</span>(data_ADNI_bl_817<span class="sc">$</span>PTID[data_ADNI_bl_817<span class="sc">$</span>Dx <span class="sc">==</span> <span class="st">"N"</span>])</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>MCI_PTID <span class="ot">&lt;-</span> sjlabelled<span class="sc">::</span><span class="fu">remove_all_labels</span>(data_ADNI_bl_817<span class="sc">$</span>PTID[data_ADNI_bl_817<span class="sc">$</span>Dx <span class="sc">==</span> <span class="st">"MCI"</span>])</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>AD_PTID <span class="ot">&lt;-</span> sjlabelled<span class="sc">::</span><span class="fu">remove_all_labels</span>(data_ADNI_bl_817<span class="sc">$</span>PTID[data_ADNI_bl_817<span class="sc">$</span>Dx <span class="sc">==</span> <span class="st">"AD"</span>])</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>data_ADNI_bl_817 <span class="sc">%&gt;%</span> </span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Dx) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Proportion of females"</span> <span class="ot">=</span> <span class="fu">mean</span>(PTGENDERMale <span class="sc">==</span> <span class="dv">0</span>, <span class="at">na.rm =</span> T),</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mean</span>(AGE), <span class="fu">IQR</span>(AGE)) <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Dx</th>
+<th style="text-align: right;">Proportion of females</th>
+<th style="text-align: right;">mean(AGE)</th>
+<th style="text-align: right;">IQR(AGE)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">N</td>
+<td style="text-align: right;">0.480</td>
+<td style="text-align: right;">75.9</td>
+<td style="text-align: right;">6.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MCI</td>
+<td style="text-align: right;">0.358</td>
+<td style="text-align: right;">74.7</td>
+<td style="text-align: right;">10.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AD</td>
+<td style="text-align: right;">0.473</td>
+<td style="text-align: right;">75.3</td>
+<td style="text-align: right;">10.6</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Being in a normative model setting, the training set (stratified by sex) will be made of cognitively normal (CN) individuals.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">589</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>train_PTID <span class="ot">&lt;-</span> data_ADNI_bl_817 <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Dx, PTGENDERMale) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">num_rows=</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_frac</span>(<span class="fl">0.8</span>, <span class="at">weight=</span>num_rows) <span class="sc">%&gt;%</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(PTID)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>data_ADNI_bl_817<span class="sc">$</span>subs <span class="ot">&lt;-</span> <span class="fu">with</span>(data_ADNI_bl_817, </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">ifelse</span>(PTID <span class="sc">%in%</span> train_PTID, </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">"train"</span>, <span class="st">"test"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.factor</span>(.)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_ADNI_bl_817, <span class="fu">aes</span>(AGE, <span class="at">color =</span> Dx, <span class="at">lty =</span> subs)) <span class="sc">+</span> </span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span>   </span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">name =</span> <span class="st">"Diagnosis"</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"darkblue"</span>, <span class="st">"gold3"</span>, <span class="st">"#D55E00"</span>))<span class="sc">+</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_linetype_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"solid"</span>, <span class="st">"dotted"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="NormMap3D_files/training-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>trainCN <span class="ot">&lt;-</span> data_ADNI_bl_817 <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(subs <span class="sc">==</span> <span class="st">"train"</span> <span class="sc">&amp;</span> Dx <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(PTID)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>testCN <span class="ot">&lt;-</span> data_ADNI_bl_817 <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(subs <span class="sc">==</span> <span class="st">"test"</span> <span class="sc">&amp;</span> Dx <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(PTID)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>trainCN_Male <span class="ot">&lt;-</span> data_ADNI_bl_817 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(subs <span class="sc">==</span> <span class="st">"train"</span> <span class="sc">&amp;</span> Dx <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> PTGENDER <span class="sc">==</span> <span class="st">"Male"</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(PTID)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(data_ADNI_bl_817, subs <span class="sc">==</span> <span class="st">"train"</span> <span class="sc">&amp;</span> Dx <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(AGE, <span class="at">color=</span>PTGENDER)) <span class="sc">+</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_bin</span>(<span class="at">geom=</span><span class="st">"step"</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">direction=</span><span class="st">"vh"</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">bins =</span> <span class="dv">15</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">position =</span> <span class="st">"identity"</span>, <span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">pad =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>           )<span class="sc">+</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">#labs(x = "Prediction intervals width (years)", y = "Frequency", color = "Diagnosis") +</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale_color_manual(name = "Diagnosis",values = rev(c("#009E73", "gold3", "#D55E00")), guide = guide_legend(reverse = TRUE,   override.aes = list(alpha = 1,                                  size = 0.9))) +</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"white"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_limits</span>(<span class="at">y =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="NormMap3D_files/training-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The training set is made of 183 individuals.</p>
+</section>
+<section id="select-grid-for-efficient-computation" class="level1">
+<h1>Select grid for efficient computation</h1>
+<p>We build a regular grid of voxels within the 3D box containing the mask.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>grid_dist <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>grid_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">unique</span>(<span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">1</span>, dims_mask[<span class="dv">1</span>], <span class="at">by =</span> grid_dist), dims_mask[<span class="dv">1</span>])),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">unique</span>(<span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">1</span>, dims_mask[<span class="dv">2</span>], <span class="at">by =</span> grid_dist), dims_mask[<span class="dv">2</span>])),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">unique</span>(<span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">1</span>, dims_mask[<span class="dv">3</span>], <span class="at">by =</span> grid_dist), dims_mask[<span class="dv">3</span>])))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>allgrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> <span class="fu">seq_len</span>(dims_mask[<span class="dv">1</span>]), </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> <span class="fu">seq_len</span>(dims_mask[<span class="dv">2</span>]), </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">z =</span> <span class="fu">seq_len</span>(dims_mask[<span class="dv">3</span>]),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">KEEP.OUT.ATTRS =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>knot_loc <span class="ot">&lt;-</span> <span class="fu">which</span>(allgrid<span class="sc">$</span>x <span class="sc">%in%</span> grid_list[[<span class="dv">1</span>]] <span class="sc">&amp;</span> </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>             allgrid<span class="sc">$</span>y <span class="sc">%in%</span> grid_list[[<span class="dv">2</span>]] <span class="sc">&amp;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>             allgrid<span class="sc">$</span>z <span class="sc">%in%</span> grid_list[[<span class="dv">3</span>]])</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>allgrid<span class="sc">$</span>knots <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>allgrid<span class="sc">$</span>knots[knot_loc] <span class="ot">&lt;-</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The spacing between consecutive knots is prespecified to be equal to 8 mm in each dimension.</p>
+</section>
+<section id="workflow-of-the-analysis" class="level1">
+<h1>Workflow of the analysis</h1>
+<p>We are now ready to perform the skew-normal modelling at the voxelwise level. In the diagramme below, <code>(V)</code> means that the content of the block applies to all <span class="math inline"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 113.1%; position: relative;" tabindex="0" ctxtmenu_counter="0"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D449 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>V</mi></math></mjx-assistive-mml></mjx-container></span> voxels in the mask, while <code>(V*)</code> refers to steps applied only on the <span class="math inline"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 113.1%; position: relative;" tabindex="0" ctxtmenu_counter="1"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D449 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: 0.363em; margin-left: 0.059em;"><mjx-mo class="mjx-n" size="s"><mjx-c class="mjx-c2217"></mjx-c></mjx-mo></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>V</mi><mo>∗</mo></msup></math></mjx-assistive-mml></mjx-container></span> voxels in the grid.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item html-widget-static-bound" id="htmlwidget-639e98d38525d63b1c3c" style="width:100%;height:464px;"><!--?xml version="1.0" encoding="UTF-8" standalone="no"?-->
+
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: %0 Pages: 1 -->
+<svg viewBox="0.00 0.00 602.00 260.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="width: 100%; height: 100%;">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 256)">
+<title>%0</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-256 598,-256 598,4 -4,4"></polygon>
+<!-- rec1 -->
+<g id="node1" class="node">
+<title>rec1</title>
+<polygon fill="none" stroke="#000000" points="441,-252 153,-252 153,-216 441,-216 441,-252"></polygon>
+<text text-anchor="middle" x="297" y="-229.8" font-family="Times,serif" font-size="14.00" fill="#000000">Original TBM image (V) </text>
+</g>
+<!-- rec2 -->
+<g id="node2" class="node">
+<title>rec2</title>
+<polygon fill="none" stroke="#000000" points="441,-180 153,-180 153,-144 441,-144 441,-180"></polygon>
+<text text-anchor="middle" x="297" y="-157.8" font-family="Times,serif" font-size="14.00" fill="#000000">Estimate SN parameters on the grid (V*)</text>
+</g>
+<!-- rec1&#45;&gt;rec2 -->
+<g id="edge1" class="edge">
+<title>rec1-&gt;rec2</title>
+<path fill="none" stroke="#000000" d="M297,-215.8314C297,-208.131 297,-198.9743 297,-190.4166"></path>
+<polygon fill="#000000" stroke="#000000" points="300.5001,-190.4132 297,-180.4133 293.5001,-190.4133 300.5001,-190.4132"></polygon>
+</g>
+<!-- rec3 -->
+<g id="node3" class="node">
+<title>rec3</title>
+<polygon fill="none" stroke="#000000" points="288,-108 0,-108 0,-72 288,-72 288,-108"></polygon>
+<text text-anchor="middle" x="144" y="-85.8" font-family="Times,serif" font-size="14.00" fill="#000000">Compute z-values (V*)</text>
+</g>
+<!-- rec2&#45;&gt;rec3 -->
+<g id="edge2" class="edge">
+<title>rec2-&gt;rec3</title>
+<path fill="none" stroke="#000000" d="M258.3916,-143.8314C238.1107,-134.2874 213.0762,-122.5065 191.6029,-112.4013"></path>
+<polygon fill="#000000" stroke="#000000" points="192.8692,-109.1291 182.3307,-108.038 189.8886,-115.4629 192.8692,-109.1291"></polygon>
+</g>
+<!-- rec5 -->
+<g id="node5" class="node">
+<title>rec5</title>
+<polygon fill="none" stroke="#000000" points="594,-108 306,-108 306,-72 594,-72 594,-108"></polygon>
+<text text-anchor="middle" x="450" y="-85.8" font-family="Times,serif" font-size="14.00" fill="#000000">Interpolate to obtain parameter functions (V)</text>
+</g>
+<!-- rec2&#45;&gt;rec5 -->
+<g id="edge4" class="edge">
+<title>rec2-&gt;rec5</title>
+<path fill="none" stroke="#000000" d="M335.6084,-143.8314C355.8893,-134.2874 380.9238,-122.5065 402.3971,-112.4013"></path>
+<polygon fill="#000000" stroke="#000000" points="404.1114,-115.4629 411.6693,-108.038 401.1308,-109.1291 404.1114,-115.4629"></polygon>
+</g>
+<!-- rec4 -->
+<g id="node4" class="node">
+<title>rec4</title>
+<polygon fill="none" stroke="#000000" points="288,-36 0,-36 0,0 288,0 288,-36"></polygon>
+<text text-anchor="middle" x="144" y="-13.8" font-family="Times,serif" font-size="14.00" fill="#000000">Interpolate to obtain z-maps (V)</text>
+</g>
+<!-- rec3&#45;&gt;rec4 -->
+<g id="edge3" class="edge">
+<title>rec3-&gt;rec4</title>
+<path fill="none" stroke="#000000" d="M144,-71.8314C144,-64.131 144,-54.9743 144,-46.4166"></path>
+<polygon fill="#000000" stroke="#000000" points="147.5001,-46.4132 144,-36.4133 140.5001,-46.4133 147.5001,-46.4132"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<script type="application/json" data-for="htmlwidget-639e98d38525d63b1c3c">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = TB]\n\n  node [shape = rectangle, fixedsize=true, width=4]\n  rec1 [label = \"Original TBM image (V) \"]\n  rec2 [label = \"Estimate SN parameters on the grid (V*)\"]\n  rec3 [label = \"Compute z-values (V*)\"]\n  rec4 [label = \"Interpolate to obtain z-maps (V)\"]\n  rec5 [label = \"Interpolate to obtain parameter functions (V)\"]\n\n  # edge definitions with the node IDs\n  rec1 -> rec2 -> rec3 -> rec4 \n  rec2 -> rec5\n  }\n\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>First, we import the TBM vectors and we select the voxels in the grid
+ for the subjects in the training set, as well as the corresponding 
+covariates.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>xdesc <span class="ot">&lt;-</span> <span class="fu">dget</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"tbm_data.desc"</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>xdesc<span class="sc">@</span>description<span class="sc">$</span>dirname <span class="ot">&lt;-</span> <span class="fu">paste0</span>(here<span class="sc">::</span><span class="fu">here</span>(),<span class="st">"/"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>tbm_data <span class="ot">&lt;-</span> <span class="fu">attach.big.matrix</span>(xdesc)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>data_PTID <span class="ot">&lt;-</span> <span class="fu">read.table</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data_PTID.txt"</span>), <span class="at">quote=</span><span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, <span class="at">comment.char=</span><span class="st">""</span>)<span class="sc">$</span>V1 <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>()</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>tbm_data_FBM_knots <span class="ot">&lt;-</span> <span class="fu">big_copy</span>(tbm_data, </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                               <span class="at">ind.row =</span> <span class="fu">which</span>(data_PTID <span class="sc">%in%</span> trainCN),   </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                               <span class="at">ind.col =</span> <span class="fu">which</span>(voxel_active <span class="sc">%in%</span> knot_loc))</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(data_ADNI_bl_817) <span class="ot">&lt;-</span> data_ADNI_bl_817<span class="sc">$</span>PTID</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>data_ADNI_bl_817 <span class="ot">&lt;-</span> data_ADNI_bl_817[data_PTID, ]</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(data_ADNI_bl_817) <span class="ot">&lt;-</span> data_ADNI_bl_817<span class="sc">$</span>PTID</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>ADNI_covariates <span class="ot">&lt;-</span> data_ADNI_bl_817[data_PTID[<span class="fu">which</span>(data_PTID <span class="sc">%in%</span> trainCN)],] <span class="sc">%&gt;%</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AGEminus70 =</span> AGE <span class="sc">-</span> <span class="dv">70</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>         ,<span class="at">PTGENDER =</span> <span class="fu">as.factor</span>(PTGENDER)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>         ) <span class="sc">%&gt;%</span>  </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(AGEminus70, PTGENDER) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The knots within the mask are 3949.</p>
+<p>At those voxels, we fit the skew-normal regression using age and gender (and their interaction) as covariates. <strong>Please note:</strong>
+ the code below fits sequentially a skew-normal regression model for 
+each voxel on the grid, therefore it will take a few minutes. The output
+ of the regressions is a set of three parameters (location, scale, 
+skewness) in CP (centered parameterisation, see <a href="https://cran.r-project.org/web/packages/sn/index.html"><code>SN</code> package</a>) at each knot on the grid.</p>
+<div class="cell" data-hash="NormMap3D_vignette_cache/html/fitskew_7a039c6fbfccf7c6f5c0dfa4aac97a06">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="cf">function</span>(col1, <span class="at">data =</span> ADNI_covariates){</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_progress</span>(pb)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">model.matrix</span>(<span class="sc">~</span> AGEminus70<span class="sc">*</span>PTGENDER, <span class="at">data =</span> data) <span class="sc">%&gt;%</span> <span class="do">####ADD interaction</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sn.mple</span>(<span class="at">x =</span> .,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">y =</span> col1,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">opt.method=</span><span class="st">"nlminb"</span>, <span class="at">penalty=</span><span class="cn">NULL</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    magrittr<span class="sc">::</span><span class="fu">extract2</span>(<span class="st">"cp"</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">kpb.suppress_noninteractive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>pb <span class="ot">&lt;-</span> <span class="fu">progress_estimated</span>(<span class="fu">ncol</span>(tbm_data_FBM_knots))</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>fitskew_time <span class="ot">&lt;-</span> <span class="fu">system.time</span>(</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  params_gridmat <span class="ot">&lt;-</span> <span class="fu">apply</span>(tbm_data_FBM_knots[], <span class="dv">2</span>, fit2) <span class="sc">%&gt;%</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">t</span>(.) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>()</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>allgrid_CN <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(allgrid, </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>                       <span class="at">mask =</span> <span class="fu">as.vector</span>(template_resized))</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="fu">ncol</span>(allgrid_CN)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>allgrid_CN[<span class="fu">with</span>(allgrid_CN, knots<span class="sc">*</span>mask<span class="sc">&gt;</span><span class="dv">0</span>),n1 <span class="sc">+</span> <span class="dv">1</span><span class="sc">:</span>(<span class="fu">ncol</span>(params_gridmat))] <span class="ot">&lt;-</span> params_gridmat</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co">#save(allgrid_CN, data_ADNI_bl_817, voxel_active, file = "CN_allgrid_agesex.RData")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="radial-basis-functions" class="level2">
+<h2 class="anchored" data-anchor-id="radial-basis-functions">Radial basis functions<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#radial-basis-functions" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+<p>To obtain a 3D version of radial basis functions, we have built a 3D version of the <code>plane</code> function from the package <a href="https://cran.r-project.org/web/packages/FRK/index.html"><code>FRK</code></a>.
+ Although the structure of the following function is very close to the 
+corresponding function on the package, please reuse it with caution.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setClass</span>(<span class="st">"plane3D"</span>,<span class="at">contains=</span><span class="st">"manifold"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plane3D <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">measure=</span><span class="fu">Euclid_dist</span>(<span class="at">dim=</span>3L)) {</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stopifnot</span>(<span class="fu">dimensions</span>(measure)<span class="sc">==</span>3L)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">new</span>(<span class="st">"plane3D"</span>,<span class="at">measure=</span>measure)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Constructor for plane</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>measure <span class="ot">&lt;-</span> <span class="cf">function</span>(dist,dim) {</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Basic checks</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.function</span>(dist))</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"dist needs to be a function that accepts dim arguments"</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span>(<span class="fu">is.numeric</span>(dim) <span class="sc">|</span> <span class="fu">is.integer</span>(dim)))</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"dim needs to be an integer, generally 1L, 2L or 3L"</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    dim <span class="ot">=</span> <span class="fu">as.integer</span>(dim)              <span class="co"># coerce to integer if numeric</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">new</span>(<span class="st">"measure"</span>,<span class="at">dist=</span>dist,<span class="at">dim=</span>dim)   <span class="co"># init. object</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>Euclid_dist <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">dim=</span>2L) {</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Euclidean distance</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stopifnot</span>(<span class="fu">is.integer</span>(dim))   <span class="co"># dimension needs to be integer</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">new</span>(<span class="st">"measure"</span>,               <span class="co"># init. measure object with the distR function</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">dist=</span><span class="cf">function</span>(x1,x2) <span class="fu">distR</span>(x1,x2), <span class="at">dim=</span>dim)</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="fu">setMethod</span>(<span class="st">"initialize"</span>,<span class="at">signature=</span><span class="st">"plane3D"</span>,</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>          <span class="cf">function</span>(.Object,<span class="at">measure=</span><span class="fu">Euclid_dist</span>(<span class="at">dim=</span>3L)) {</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    .Object<span class="sc">@</span>type <span class="ot">&lt;-</span> <span class="st">"plane3D"</span>       <span class="co"># set type</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    .Object<span class="sc">@</span>measure <span class="ot">&lt;-</span> measure    <span class="co"># set measure</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">callNextMethod</span>(.Object)})</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>.GRBF_wrapper <span class="ot">&lt;-</span> <span class="cf">function</span>(manifold,mu,std) {</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.check_basis_function_args</span>(manifold,mu,std)</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(s) {</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stopifnot</span>(<span class="fu">ncol</span>(s) <span class="sc">==</span> <span class="fu">dimensions</span>(manifold)) <span class="co"># Internal checking</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>        dist_sq <span class="ot">&lt;-</span> <span class="fu">distance</span>(manifold,s,mu)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>        <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span><span class="sc">*</span> dist_sq<span class="sc">/</span>(std<span class="sc">^</span><span class="dv">2</span>) )</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>.MQ_wrapper <span class="ot">&lt;-</span> <span class="cf">function</span>(manifold,mu,std) {</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.check_basis_function_args</span>(manifold,mu,std)</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(s) {</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stopifnot</span>(<span class="fu">ncol</span>(s) <span class="sc">==</span> <span class="fu">dimensions</span>(manifold)) <span class="co"># Internal checking</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>        dist_sq <span class="ot">&lt;-</span> <span class="fu">distance</span>(manifold,s,mu)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">+</span> (dist_sq<span class="sc">*</span>std)<span class="sc">^</span><span class="dv">2</span>)   <span class="do">###(dist_sq^2 + std^2)^1.03     </span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>.check_basis_function_args <span class="ot">&lt;-</span> <span class="cf">function</span>(manifold,loc,scale) {</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.matrix</span>(loc))</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Basis functions need to be evaluated using locations inside a matrix"</span>)</span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span>(<span class="fu">dimensions</span>(manifold) <span class="sc">==</span> <span class="fu">ncol</span>(loc)))</span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Incorrect number of columns for the argument loc"</span>)</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.numeric</span>(scale))</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"The scale parmaeter needs to be numeric"</span>)</span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span>(scale <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"The scale parameter needs to be greater than zero"</span>)</span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>local_basis <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">manifold=</span><span class="fu">sphere</span>(),          <span class="co"># default manifold is sphere</span></span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>                        <span class="at">loc=</span><span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>),<span class="at">nrow=</span><span class="dv">1</span>),  <span class="co"># one centroid at (1,0)</span></span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>                        <span class="at">scale=</span><span class="dv">1</span>,                    <span class="co"># std = 1, and Gaussian RBF</span></span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>                        <span class="at">type=</span><span class="fu">c</span>(<span class="st">"bisquare"</span>,<span class="st">"Gaussian"</span>,<span class="st">"exp"</span>,<span class="st">"Matern32"</span>, <span class="st">"multiquadric"</span>)) {</span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Basic checks</span></span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.matrix</span>(loc)) <span class="fu">stop</span>(<span class="st">"loc needs to be a matrix"</span>)</span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span>(<span class="fu">dimensions</span>(manifold) <span class="sc">==</span> <span class="fu">ncol</span>(loc))) <span class="fu">stop</span>(<span class="st">"number of columns in loc needs to be the</span></span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a><span class="st">                                                  same as the number of manifold dimensions"</span>)</span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span>(<span class="fu">length</span>(scale) <span class="sc">==</span> <span class="fu">nrow</span>(loc))) <span class="fu">stop</span>(<span class="st">"need to have as many scale parameters as centroids"</span>)</span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>    type <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(type)</span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(loc)                                <span class="co"># n is the number of centroids</span></span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colnames</span>(loc) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">outer</span>(<span class="st">"loc"</span>,<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(loc),   <span class="co"># label dimensions as loc1,loc2,...,locn</span></span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>                             <span class="at">FUN =</span> paste0))</span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>    fn <span class="ot">&lt;-</span> pars <span class="ot">&lt;-</span> <span class="fu">list</span>()  <span class="co"># initialise lists of functions and parameters</span></span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>        <span class="do">## Assign the functions as determined by user</span></span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(type<span class="sc">==</span><span class="st">"bisquare"</span>) {</span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>            fn[[i]] <span class="ot">&lt;-</span>  <span class="fu">.bisquare_wrapper</span>(manifold,<span class="fu">matrix</span>(loc[i,],<span class="at">nrow=</span><span class="dv">1</span>),scale[i])</span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> <span class="cf">if</span> (type<span class="sc">==</span><span class="st">"Gaussian"</span>) {</span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>            fn[[i]] <span class="ot">&lt;-</span>  <span class="fu">.GRBF_wrapper</span>(manifold,<span class="fu">matrix</span>(loc[i,],<span class="at">nrow=</span><span class="dv">1</span>),scale[i])</span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> <span class="cf">if</span> (type<span class="sc">==</span><span class="st">"exp"</span>) {</span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>            fn[[i]] <span class="ot">&lt;-</span>  <span class="fu">.exp_wrapper</span>(manifold,<span class="fu">matrix</span>(loc[i,],<span class="at">nrow=</span><span class="dv">1</span>),scale[i])</span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> <span class="cf">if</span> (type<span class="sc">==</span><span class="st">"Matern32"</span>) {</span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>            fn[[i]] <span class="ot">&lt;-</span>  <span class="fu">.Matern32_wrapper</span>(manifold,<span class="fu">matrix</span>(loc[i,],<span class="at">nrow=</span><span class="dv">1</span>),scale[i])</span>
+<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> <span class="cf">if</span> (type<span class="sc">==</span><span class="st">"multiquadric"</span>) {</span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>            fn[[i]] <span class="ot">&lt;-</span>  <span class="fu">.MQ_wrapper</span>(manifold,<span class="fu">matrix</span>(loc[i,],<span class="at">nrow=</span><span class="dv">1</span>),scale[i])</span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a>        <span class="do">## Save the parameters to the parameter list (loc and scale)</span></span>
+<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a>        pars[[i]] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">loc =</span> <span class="fu">matrix</span>(loc[i,],<span class="at">nrow=</span><span class="dv">1</span>), <span class="at">scale=</span>scale[i])</span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Create a data frame which summarises info about the functions. Set resolution = 1</span></span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(loc,scale,<span class="at">res=</span><span class="dv">1</span>)</span>
+<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Create new basis function, using the manifold, n, functions, parameters list, and data frame.</span></span>
+<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a>    this_basis <span class="ot">&lt;-</span> <span class="fu">Basis</span>(<span class="at">manifold =</span> manifold,  <span class="at">n =</span> n, <span class="at">fn =</span> fn, <span class="at">pars =</span> pars, <span class="at">df =</span> df)</span>
+<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(this_basis)</span>
+<span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now we create the local basis functions centered at the knots of the 
+grid which fall within the mask. The scale parameter is set to be 
+smaller than the distance between adjacent knots. The design matrix with
+ the radial basis functions is saved.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>basis_locs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(allgrid_CN) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mask<span class="sc">*</span>knots <span class="sc">&gt;</span>  <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(x,y,z) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>() </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">local_basis</span>(<span class="at">manifold =</span> <span class="fu">plane3D</span>(),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">loc=</span>basis_locs,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">scale=</span><span class="fu">rep</span>(grid_dist<span class="sc">*</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">nrow</span>(basis_locs)),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type=</span><span class="st">"Gaussian"</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>coords<span class="ot">&lt;-</span><span class="fu">filter</span>(allgrid_CN, mask<span class="sc">&gt;</span><span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>                    dplyr<span class="sc">::</span><span class="fu">select</span>(x,y,z) <span class="sc">%&gt;%</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">as.matrix</span>(.)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>fun1 <span class="ot">&lt;-</span> <span class="cf">function</span>(xx, maxdist){</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_progress</span>(pb)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  ii <span class="ot">&lt;-</span> FRK<span class="sc">::</span><span class="fu">distR</span>(coords, <span class="fu">matrix</span>(xx, <span class="at">nrow =</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>      magrittr<span class="sc">::</span><span class="fu">is_less_than</span>(maxdist) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">which</span>(.)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  ji <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">apply</span>(basis_locs, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="fu">identical</span>(x, xx))) <span class="sc">%&gt;%</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(., <span class="fu">length</span>(ii))</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  xi <span class="ot">&lt;-</span> coords[ii, ]   <span class="sc">%&gt;%</span>  <span class="do">##row index of xx in basis_locs</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>      G<span class="sc">@</span>fn[[<span class="fu">unique</span>(ji)]](.) <span class="sc">%&gt;%</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.vector</span>(.)  </span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">i=</span>ii, <span class="at">p =</span> <span class="fu">length</span>(ii) , <span class="at">x =</span> xi))  <span class="co">#j=ji</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>pb <span class="ot">&lt;-</span> <span class="fu">progress_estimated</span>(<span class="fu">nrow</span>(basis_locs))</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(  </span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>radial_design_mat <span class="ot">&lt;-</span> <span class="fu">apply</span>(basis_locs, <span class="dv">1</span>, fun1, <span class="at">maxdist =</span> grid_dist<span class="sc">*</span><span class="dv">2</span>) <span class="sc">%&gt;&gt;%</span> </span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>  {<span class="fu">sparseMatrix</span>(<span class="at">x=</span><span class="fu">unlist</span>(<span class="fu">lapply</span>(.,<span class="st">"[["</span>,<span class="st">"x"</span>)), </span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">i=</span><span class="fu">unlist</span>(<span class="fu">lapply</span>(.,<span class="st">"[["</span>,<span class="st">"i"</span>)),</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">p=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">cumsum</span>(<span class="fu">sapply</span>(.,<span class="cf">function</span>(x){x<span class="sc">$</span>p}))),</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">dims=</span><span class="fu">c</span>(<span class="fu">nrow</span>(coords), <span class="fu">length</span>(.)),</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">index1=</span><span class="cn">TRUE</span>)}</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(radial_design_mat, <span class="at">file =</span> <span class="fu">paste0</span>(<span class="st">"RBF_"</span>, grid_dist, <span class="st">"mm.RData"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Then, we use <code>glmnet</code> to get a location, scale and 
+skewness parameter for all the voxels outside the grid, thus covering 
+the entire images. In other words, we are interpolating to obtain 
+parameter functions across the rest of the brain images.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"RBF_8mm.RData"</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>ind2<span class="ot">&lt;-</span>  <span class="fu">with</span>(allgrid_CN, <span class="fu">which</span>(knots<span class="sc">*</span>mask <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>allgrid_CN<span class="sc">$</span>mean_radial <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> allgrid_CN <span class="sc">%&gt;%</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(., mask <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(., <span class="fu">which</span>(knots <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  radial_design_mat[., ] <span class="sc">%&gt;%</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(basis_locs, .) <span class="sc">%&gt;%</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  glmnet<span class="sc">::</span><span class="fu">glmnet</span>(.,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>                 allgrid_CN<span class="sc">$</span>mean[ind2],</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lambda =</span> <span class="dv">0</span>,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>                 <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>allgrid_CN<span class="sc">$</span>mean_radial[voxel_active] <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, coords, radial_design_mat) <span class="sc">%*%</span> <span class="fu">coef</span>(mod1) <span class="sc">%&gt;%</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.vector</span>()</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(allgrid_CN<span class="sc">$</span>mean_radial)</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>allgrid_CN<span class="sc">$</span>SD_radial <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> allgrid_CN <span class="sc">%&gt;%</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(., mask <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(., <span class="fu">which</span>(knots <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>  radial_design_mat[., ] <span class="sc">%&gt;%</span></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(basis_locs, .) <span class="sc">%&gt;%</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>  glmnet<span class="sc">::</span><span class="fu">glmnet</span>(.,</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">log</span>(allgrid_CN<span class="sc">$</span>SD[ind2]),</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lambda =</span> <span class="dv">0</span>,</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>                 <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>allgrid_CN<span class="sc">$</span>SD_radial[voxel_active] <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, coords, radial_design_mat) <span class="sc">%*%</span> <span class="fu">coef</span>(mod1) <span class="sc">%&gt;%</span></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">exp</span>() <span class="sc">%&gt;%</span> <span class="fu">as.vector</span>()</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>allgrid_CN<span class="sc">$</span>gamma1_radial <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> allgrid_CN <span class="sc">%&gt;%</span> </span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(., mask <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(., <span class="fu">which</span>(knots <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>  radial_design_mat[., ] <span class="sc">%&gt;%</span></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(basis_locs, .) <span class="sc">%&gt;%</span></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>  glmnet<span class="sc">::</span><span class="fu">glmnet</span>(.,</span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">qnorm</span>((allgrid_CN<span class="sc">$</span>gamma1[ind2]<span class="sc">/</span><span class="fl">0.9952719</span> <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">/</span><span class="dv">2</span>),</span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lambda =</span> <span class="dv">0</span>,</span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>                 <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>allgrid_CN<span class="sc">$</span>gamma1_radial[voxel_active] <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, coords, radial_design_mat) <span class="sc">%*%</span> <span class="fu">coef</span>(mod1) <span class="sc">%&gt;%</span></span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>(.) <span class="sc">%&gt;%</span></span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pnorm</span>(.) <span class="sc">%&gt;%</span></span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>  magrittr<span class="sc">::</span><span class="fu">multiply_by</span>(<span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>  magrittr<span class="sc">::</span><span class="fu">subtract</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>  magrittr<span class="sc">::</span><span class="fu">multiply_by</span>(<span class="fl">0.9952719</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.vector</span>(.)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="association-with-age-and-sex" class="level2">
+<h2 class="anchored" data-anchor-id="association-with-age-and-sex">Association with age and sex<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#association-with-age-and-sex" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+<p>We can plot the association of the covariates with the mean of the 
+TBM value at each voxel. In particular, we can look at the intercept 
+(that can be interpreted as the mean for the reference category, that 
+is, a <strong>70-year-old female CN</strong> subject.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"RBF_8mm.RData"</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>basis_locs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(allgrid_CN) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mask<span class="sc">*</span>knots <span class="sc">&gt;</span>  <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(x,y,z) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>() </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>ind2<span class="ot">&lt;-</span>  <span class="fu">with</span>(allgrid_CN, <span class="fu">which</span>(knots<span class="sc">*</span>mask <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>intercept_coefSN <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">nrow</span>(allgrid_CN))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> allgrid_CN <span class="sc">%&gt;%</span> </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(., mask <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(., <span class="fu">which</span>(knots <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  radial_design_mat[., ] <span class="sc">%&gt;%</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  glmnet<span class="sc">::</span><span class="fu">glmnet</span>(.,</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>                 allgrid_CN<span class="sc">$</span>X.Intercept.CP.[ind2],</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lambda =</span> <span class="dv">0</span>,</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>                 <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>intercept_coefSN[voxel_active] <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, radial_design_mat) <span class="sc">%*%</span> <span class="fu">coef</span>(mod1) <span class="sc">%&gt;%</span>   </span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.vector</span>()</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="fu">slices_plot</span>(intercept_coefSN[voxel_active], <span class="at">dims =</span> dims_mask, <span class="at">voxels =</span> voxel_active, </span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>              <span class="at">mask.under =</span> template_resized<span class="sc">&gt;</span><span class="dv">0</span>, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">col.threshold =</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="NormMap3D_files/covariates_association1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Below is the <strong>age</strong> main effect in the normative 
+population (i.e.&nbsp;the change in TBM values corresponding to a 1-year
+ age increase for CN females).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>age_coefSN <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">nrow</span>(allgrid_CN))</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> allgrid_CN <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(., mask <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(., <span class="fu">which</span>(knots <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  radial_design_mat[., ] <span class="sc">%&gt;%</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  glmnet<span class="sc">::</span><span class="fu">glmnet</span>(.,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                 allgrid_CN<span class="sc">$</span>AGEminus70[ind2],</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lambda =</span> <span class="dv">0</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>age_coefSN[voxel_active] <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, radial_design_mat) <span class="sc">%*%</span> <span class="fu">coef</span>(mod1) <span class="sc">%&gt;%</span>  </span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.vector</span>()</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="fu">slices_plot</span>(age_coefSN[voxel_active], <span class="at">dims =</span> dims_mask, <span class="at">voxels =</span> voxel_active, </span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">mask.under =</span> template_resized<span class="sc">&gt;</span><span class="dv">0</span>, <span class="at">alpha =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="NormMap3D_files/covariates_association2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The figure below shows the <strong>sex</strong> main effect in the 
+normative population (i.e.&nbsp;the average difference in TBM values 
+between CN males and CN females at the same age).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>PTGENDERMale_coefSN <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">nrow</span>(allgrid_CN))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> allgrid_CN <span class="sc">%&gt;%</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(., mask <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(., <span class="fu">which</span>(knots <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  radial_design_mat[., ] <span class="sc">%&gt;%</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  glmnet<span class="sc">::</span><span class="fu">glmnet</span>(.,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                 allgrid_CN<span class="sc">$</span>PTGENDERMale[ind2],</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lambda =</span> <span class="dv">0</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>PTGENDERMale_coefSN[voxel_active] <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, radial_design_mat) <span class="sc">%*%</span> <span class="fu">coef</span>(mod1) <span class="sc">%&gt;%</span>  </span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.vector</span>()</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">slices_plot</span>(PTGENDERMale_coefSN[voxel_active], <span class="at">dims =</span> dims_mask, <span class="at">voxels =</span> voxel_active, </span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">mask.under =</span> template_resized<span class="sc">&gt;</span><span class="dv">0</span>, <span class="at">alpha =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="NormMap3D_files/covariates_association3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The figure below shows the <strong>age-sex</strong> interaction in 
+the normative population (i.e.&nbsp;the change in TBM values 
+corresponding to a 1-year age increase for CN males).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>interaction_coefSN <span class="ot">&lt;-</span>  <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">nrow</span>(allgrid_CN))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> allgrid_CN <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(., mask <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(., <span class="fu">which</span>(knots <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  radial_design_mat[., ] <span class="sc">%&gt;%</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#cbind(basis_locs, .) %&gt;%</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  glmnet<span class="sc">::</span><span class="fu">glmnet</span>(.,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                 allgrid_CN<span class="sc">$</span>AGEminus70.PTGENDERMale[ind2],</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lambda =</span> <span class="dv">0</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>interaction_coefSN[voxel_active] <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, radial_design_mat) <span class="sc">%*%</span> <span class="fu">coef</span>(mod1) <span class="sc">%&gt;%</span>  </span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.vector</span>()</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="fu">slices_plot</span>(interaction_coefSN[voxel_active], <span class="at">dims =</span> dims_mask, <span class="at">voxels =</span> voxel_active, </span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">mask.under =</span> template_resized<span class="sc">&gt;</span><span class="dv">0</span>, <span class="at">alpha =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="NormMap3D_files/covariates_association4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>You can now plot the mean for e.g.&nbsp;a <strong>87-year-old female CN</strong> subject.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">slices_plot</span>(intercept_coefSN[voxel_active] <span class="sc">+</span> <span class="dv">17</span><span class="sc">*</span>age_coefSN[voxel_active], </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">dims =</span> dims_mask, <span class="at">voxels =</span> voxel_active, </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">mask.under =</span> template_resized<span class="sc">&gt;</span><span class="dv">0</span>, <span class="at">alpha.val =</span> <span class="dv">1</span>, </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.range =</span> <span class="fu">c</span>(<span class="dv">700</span>,<span class="dv">1400</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.threshold =</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="NormMap3D_files/examplemean-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="compute-z-maps" class="level1">
+<h1>Compute z-maps</h1>
+<p>Let us now look at the left-hand side of the workflow.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item html-widget-static-bound" id="htmlwidget-8778d192374bafcaad46" style="width:100%;height:464px;"><!--?xml version="1.0" encoding="UTF-8" standalone="no"?-->
+
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: %0 Pages: 1 -->
+<svg viewBox="0.00 0.00 602.00 260.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="width: 100%; height: 100%;">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 256)">
+<title>%0</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-256 598,-256 598,4 -4,4"></polygon>
+<!-- rec1 -->
+<g id="node1" class="node">
+<title>rec1</title>
+<polygon fill="none" stroke="#000000" points="441,-252 153,-252 153,-216 441,-216 441,-252"></polygon>
+<text text-anchor="middle" x="297" y="-229.8" font-family="Times,serif" font-size="14.00" fill="#000000">Original TBM image (V) </text>
+</g>
+<!-- rec2 -->
+<g id="node2" class="node">
+<title>rec2</title>
+<polygon fill="none" stroke="#000000" points="441,-180 153,-180 153,-144 441,-144 441,-180"></polygon>
+<text text-anchor="middle" x="297" y="-157.8" font-family="Times,serif" font-size="14.00" fill="#000000">Estimate SN parameters on the grid (V*)</text>
+</g>
+<!-- rec1&#45;&gt;rec2 -->
+<g id="edge1" class="edge">
+<title>rec1-&gt;rec2</title>
+<path fill="none" stroke="#000000" d="M297,-215.8314C297,-208.131 297,-198.9743 297,-190.4166"></path>
+<polygon fill="#000000" stroke="#000000" points="300.5001,-190.4132 297,-180.4133 293.5001,-190.4133 300.5001,-190.4132"></polygon>
+</g>
+<!-- rec3 -->
+<g id="node3" class="node">
+<title>rec3</title>
+<polygon fill="none" stroke="#000000" points="288,-108 0,-108 0,-72 288,-72 288,-108"></polygon>
+<text text-anchor="middle" x="144" y="-85.8" font-family="Times,serif" font-size="14.00" fill="#000000">Compute z-values (V*)</text>
+</g>
+<!-- rec2&#45;&gt;rec3 -->
+<g id="edge2" class="edge">
+<title>rec2-&gt;rec3</title>
+<path fill="none" stroke="#000000" d="M258.3916,-143.8314C238.1107,-134.2874 213.0762,-122.5065 191.6029,-112.4013"></path>
+<polygon fill="#000000" stroke="#000000" points="192.8692,-109.1291 182.3307,-108.038 189.8886,-115.4629 192.8692,-109.1291"></polygon>
+</g>
+<!-- rec5 -->
+<g id="node5" class="node">
+<title>rec5</title>
+<polygon fill="none" stroke="#000000" points="594,-108 306,-108 306,-72 594,-72 594,-108"></polygon>
+<text text-anchor="middle" x="450" y="-85.8" font-family="Times,serif" font-size="14.00" fill="#000000">Interpolate to obtain parameter functions (V)</text>
+</g>
+<!-- rec2&#45;&gt;rec5 -->
+<g id="edge4" class="edge">
+<title>rec2-&gt;rec5</title>
+<path fill="none" stroke="#000000" d="M335.6084,-143.8314C355.8893,-134.2874 380.9238,-122.5065 402.3971,-112.4013"></path>
+<polygon fill="#000000" stroke="#000000" points="404.1114,-115.4629 411.6693,-108.038 401.1308,-109.1291 404.1114,-115.4629"></polygon>
+</g>
+<!-- rec4 -->
+<g id="node4" class="node">
+<title>rec4</title>
+<polygon fill="none" stroke="#000000" points="288,-36 0,-36 0,0 288,0 288,-36"></polygon>
+<text text-anchor="middle" x="144" y="-13.8" font-family="Times,serif" font-size="14.00" fill="#000000">Interpolate to obtain z-maps (V)</text>
+</g>
+<!-- rec3&#45;&gt;rec4 -->
+<g id="edge3" class="edge">
+<title>rec3-&gt;rec4</title>
+<path fill="none" stroke="#000000" d="M144,-71.8314C144,-64.131 144,-54.9743 144,-46.4166"></path>
+<polygon fill="#000000" stroke="#000000" points="147.5001,-46.4132 144,-36.4133 140.5001,-46.4133 147.5001,-46.4132"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<script type="application/json" data-for="htmlwidget-8778d192374bafcaad46">{"x":{"diagram":"digraph {\n  graph [layout = dot, rankdir = TB]\n\n  node [shape = rectangle, fixedsize=true, width=4]\n  rec1 [label = \"Original TBM image (V) \"]\n  rec2 [label = \"Estimate SN parameters on the grid (V*)\"]\n  rec3 [label = \"Compute z-values (V*)\"]\n  rec4 [label = \"Interpolate to obtain z-maps (V)\"]\n  rec5 [label = \"Interpolate to obtain parameter functions (V)\"]\n\n  # edge definitions with the node IDs\n  rec1 -> rec2 -> rec3 -> rec4 \n  rec2 -> rec5\n  }\n\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>For each TBM image, we can now compute the z-values on the voxels on 
+the grid and then interpolate on the rest of the images. Then, we can 
+compute indices of abnormality for each image. This can be done for each
+ image (in the training as well as the test set, either cognitively 
+normal or with diseases) with the script <code>produce_zmaps_covariates.R</code> (we recommend to do it on a cluster). Then the indices are joined in a single table.</p>
+<section id="indices-of-abnormality" class="level2">
+<h2 class="anchored" data-anchor-id="indices-of-abnormality">Indices of abnormality<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#indices-of-abnormality" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+<p>We compute a lot of indices: the mean of the z-values, their median, 
+their range, their variance etc… You could also take an extreme block 
+(say, the 99.99-th percentile) and compute the mean of that. You would 
+expect larger extremes to be associated with departure from the 
+normative population, possibly linked with some cognitive impairment.</p>
+<p>The figures below show boxplots of one specific index of deviation by
+ diagnosis. MCI and AD groups show a higher median with respect to the 
+CN group. The score is also higher for MCI+AD on average across ADAS13 
+values and in the age range considered.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>zmap_stats <span class="ot">&lt;-</span> <span class="fu">read.table</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"zmaps_stats_agesexinter.dat"</span>),</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">quote=</span><span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, <span class="at">comment.char=</span><span class="st">""</span>, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"PTID"</span>, <span class="st">"mean_zmap"</span>, <span class="st">"median_zmap"</span>, <span class="st">"diffrange_zmap"</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"var_zmap"</span>, <span class="st">"IQR_zmap"</span>, <span class="st">"expos_zmap"</span>, <span class="st">"exneg_zmap"</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"meanposblock_zmap"</span>, <span class="st">"meannegblock_zmap"</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"meanabsblock_zmap"</span>, <span class="st">"norm_zmap"</span>))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>zmap_stats <span class="ot">&lt;-</span> <span class="fu">left_join</span>(zmap_stats, data_ADNI_bl_817, <span class="at">by =</span> <span class="st">"PTID"</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(zmap_stats, <span class="fu">aes</span>(<span class="at">x =</span> Dx, <span class="at">y =</span> meanabsblock_zmap, <span class="at">color =</span> Dx)) <span class="sc">+</span> </span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()  <span class="sc">+</span>  </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_violin(draw_quantiles = c(0.25, 0.5, 0.75))  +  </span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">expression</span>(u[<span class="st">"0.9999"</span>]<span class="sc">^</span>{abs}))<span class="sc">+</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">name =</span> <span class="st">"Diagnosis"</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#009E73"</span>, <span class="st">"gold3"</span>, <span class="st">"#D55E00"</span>)) <span class="sc">+</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">name =</span> <span class="st">"Diagnosis"</span>, <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"CN"</span>,<span class="st">"MCI"</span>,<span class="st">"AD"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="NormMap3D_files/zmap_stats-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> zmap_stats, <span class="fu">aes</span>(<span class="at">y =</span> meanabsblock_zmap, <span class="at">x =</span> ADAS13.bl, <span class="at">color =</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">*</span>(Dx<span class="sc">!=</span><span class="st">"N"</span>)))) <span class="sc">+</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">expression</span>(u[<span class="st">"0.9999"</span>]<span class="sc">^</span>{abs}), <span class="at">x =</span> <span class="st">"ADAS13 at study baseline"</span>) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">scale_colour_manual</span>(<span class="at">name =</span> <span class="st">"Diagnosis:       "</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#009E73"</span>, <span class="st">"coral2"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"CN"</span>, <span class="st">"MCI+AD"</span>))    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="NormMap3D_files/zmap_stats-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The scores are</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>zmap_stats <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> ., <span class="fu">aes</span>(<span class="at">y =</span> meanabsblock_zmap,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">x =</span> AGE, <span class="at">color =</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">*</span>(Dx<span class="sc">!=</span><span class="st">"N"</span>)))) <span class="sc">+</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">expression</span>(u[<span class="st">"0.9999"</span>]<span class="sc">^</span>{abs}), <span class="at">x =</span> <span class="st">"Age"</span>) <span class="sc">+</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">name =</span> <span class="st">"Diagnosis:       "</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#009E73"</span>, <span class="st">"coral2"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"CN"</span>, <span class="st">"MCI+AD"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="NormMap3D_files/zmap_stats_byage-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="session-info" class="level1">
+<h1>Session info</h1>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.2 (2022-10-31 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22631)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United Kingdom.utf8 
+[2] LC_CTYPE=English_United Kingdom.utf8   
+[3] LC_MONETARY=English_United Kingdom.utf8
+[4] LC_NUMERIC=C                           
+[5] LC_TIME=English_United Kingdom.utf8    
+
+attached base packages:
+[1] stats4    splines   stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] ADNIMERGE_0.0.1        Hmisc_4.8-0            Formula_1.2-5         
+ [4] survival_3.4-0         lattice_0.20-45        FRK_2.1.5             
+ [7] e1071_1.7-13           sp_1.6-0               sn_2.1.1              
+[10] ROCR_1.0-11            mgcv_1.9-0             nlme_3.1-160          
+[13] nortest_1.0-4          neurobase_1.32.3       oro.nifti_0.11.4      
+[16] glmnet_4.1-6           Matrix_1.5-1           knitrProgressBar_1.1.0
+[19] knitr_1.41             sjlabelled_1.2.0       dplyr_1.1.4           
+[22] ggcorrplot_0.1.4       pipeR_0.6.1.3          fda_6.1.4             
+[25] deSolve_1.35           fds_1.8                RCurl_1.98-1.12       
+[28] rainbow_3.7            pcaPP_2.0-3            MASS_7.3-58.1         
+[31] magrittr_2.0.3         ggplot2_3.5.1          bigstatsr_1.5.12      
+[34] bigmemory_4.6.1        pacman_0.5.1          
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.4.1        uuid_1.1-0          backports_1.4.1    
+  [4] spam_2.9-1          plyr_1.8.8          TMB_1.9.4          
+  [7] RNifti_1.5.0        digest_0.6.31       foreach_1.5.2      
+ [10] htmltools_0.5.4     fansi_1.0.3         checkmate_2.1.0    
+ [13] cluster_2.1.4       doParallel_1.0.17   ks_1.14.0          
+ [16] bigassertr_0.1.6    hdrcde_3.4          matrixStats_0.63.0 
+ [19] R.utils_2.12.2      xts_0.13.1          jpeg_0.1-10        
+ [22] colorspace_2.0-3    xfun_0.38           jsonlite_1.8.4     
+ [25] bigmemory.sri_0.1.6 flock_0.7           zoo_1.8-12         
+ [28] iterators_1.0.14    glue_1.6.2          gtable_0.3.1       
+ [31] car_3.1-2           shape_1.4.6         maps_3.4.2         
+ [34] abind_1.4-5         scales_1.3.0        mvtnorm_1.1-3      
+ [37] bigparallelr_0.3.2  rstatix_0.7.2       Rcpp_1.0.11        
+ [40] viridisLite_0.4.1   htmlTable_2.4.1     bit_4.0.5          
+ [43] foreign_0.8-83      proxy_0.4-27        mclust_6.0.0       
+ [46] dotCall64_1.0-2     intervals_0.15.3    htmlwidgets_1.6.1  
+ [49] DiagrammeR_1.0.10   RColorBrewer_1.1-3  ellipsis_0.3.2     
+ [52] ff_4.0.9            pkgconfig_2.0.3     R.methodsS3_1.8.2  
+ [55] farver_2.1.1        nnet_7.3-18         deldir_1.0-6       
+ [58] utf8_1.2.2          here_1.0.1          tidyselect_1.2.0   
+ [61] labeling_0.4.2      rlang_1.1.1         reshape2_1.4.4     
+ [64] munsell_0.5.0       cellranger_1.1.0    tools_4.2.2        
+ [67] visNetwork_2.1.2    cli_3.6.0           generics_0.1.3     
+ [70] broom_1.0.2         evaluate_0.20       stringr_1.5.0      
+ [73] fastmap_1.1.0       yaml_2.3.6          purrr_1.0.1        
+ [76] R.oo_1.25.0         pracma_2.4.2        compiler_4.2.2     
+ [79] rstudioapi_0.14     png_0.1-8           ggsignif_0.6.4     
+ [82] spacetime_1.3-0     tibble_3.2.1        statmod_1.5.0      
+ [85] stringi_1.7.12      ps_1.7.2            highr_0.10         
+ [88] fields_16.2         vctrs_0.6.5         pillar_1.9.0       
+ [91] lifecycle_1.0.3     data.table_1.14.6   cowplot_1.1.1      
+ [94] bitops_1.0-7        insight_0.19.2      R6_2.5.1           
+ [97] latticeExtra_0.6-30 KernSmooth_2.23-20  gridExtra_2.3      
+[100] codetools_0.2-18    rprojroot_2.0.3     withr_2.5.0        
+[103] mnormt_2.1.1        parallel_4.2.2      grid_4.2.2         
+[106] rpart_4.1.19        tidyr_1.3.0         class_7.3-20       
+[109] rmio_0.4.0          rmarkdown_2.19      carData_3.0-5      
+[112] sparseinv_0.1.3     ggpubr_0.6.0        numDeriv_2016.8-1.1
+[115] base64enc_0.1-3     interp_1.1-3       </code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
