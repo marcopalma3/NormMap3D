@@ -1,0 +1,687 @@
+---
+title: "Analysis on non-smoothed images"
+author: "Marco Palma"
+date: "`r format(Sys.Date(),'%d')` March 2020"
+output: 
+  editor_options: 
+    chunk_output_type: console
+  html_notebook:
+    code_folding: hide
+    highlight: tango
+    theme: readable
+  html_document:
+    keep_md: true
+    theme: readable
+    code_folding: hide
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+    number_sections: true
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    fig_crop: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, tidy = TRUE
+                      #, dev = "pdf", fig.path = "figures_TBM/"
+                      )
+
+options(digits = 3)
+```
+
+## Packages
+
+```{r packages}
+start_time <- Sys.time()
+
+library(bigmemory)
+library(bigstatsr)
+library(ggplot2)
+library(MASS)
+library(dplyr)
+library(e1071)
+library(oro.nifti)
+library(neurobase)
+
+```
+
+The following chunk is needed only the first time that you try to use your big file. It will create the .bin and the .desc file that you can use next time for fast loading.
+
+```{r, echo = TRUE, eval = FALSE}
+x <- read.big.matrix("data_masked.dat",
+                     sep = " ", header = FALSE,
+                     type = "integer",
+                     has.row.names = TRUE,
+                     backingfile = "tbm_data.bin", 
+                     descriptorfile = "tbm_data.desc")
+```
+
+
+## Plots
+
+```{r import_data}
+xdesc <- dget("tbm_data.desc")
+
+tbm_data <- attach.big.matrix(xdesc)
+
+data_PTID <- read.table("data_PTID.txt", quote="\"", comment.char="")$V1 %>%
+  as.character()
+
+#dim(tbm_data[])
+#tbm_data[1:3,1:5]
+```
+
+```{r summary_stats, cache=TRUE}
+tbm_data_FBM <- big_copy(tbm_data)
+#tbm_data_FBM <- big_copy(tbm_data, type = "unsigned short")
+#system.time(summary_tbm <- big_colstats(tbm_data_FBM))
+#summary_tbm$mean <- summary_tbm$sum/817
+
+stats_scale <- big_scale(center = TRUE, scale = TRUE)(tbm_data_FBM)
+
+
+#colskew <- function(X, ind) Rfast::colskewness(X[, ind])
+colskew <- function(X, ind) timeSeries::colSkewness(X[, ind])
+#colskew <- function(X, ind) e1071::skewness(X[, ind], type = 3)
+skewness <- big_apply(tbm_data_FBM, a.FUN = colskew, a.combine = 'c')
+
+
+stats_scale <- cbind(stats_scale, skewness)
+
+```
+
+Skewness measure:
+
+$$\dfrac{nm_3}{(n-1)(n-2)(\frac{m_2}{n-1})^{3/2}}=\dfrac{n\sqrt{n-1}}{n-2}\dfrac{m_3}{m_2^{3/2}}$$
+```{r neurofundata}
+devtools::install_github("marcopalma3/neurofundata") #, force = TRUE)
+library(neurofundata)
+```
+
+```{r plots_summary, fig.show='hold', out.width = "33%"}
+theme_set(
+    theme_classic(base_size = 18)
+)
+
+ggplot(stats_scale/1000, aes(center,scale)) +
+  geom_bin2d(bins = 600) +
+  scale_fill_continuous(type = "viridis") +
+  stat_smooth(color = 2, fill = "yellow") +
+  labs(x = "Voxelwise mean", y = "Voxelwise SD", title = "Rescaled TBM images (divided by 1000)")
+
+ggplot(stats_scale, aes(center,skewness)) +
+  geom_bin2d(bins = 600) +
+  scale_fill_continuous(type = "viridis") +
+  stat_smooth(color = 2, fill = "yellow") +
+  labs(x = "Voxelwise mean", y = "Voxelwise skewness", fill="Count"#, title = "Rescaled TBM images"
+  )
+
+ggplot(stats_scale, aes(center, scale)) +
+  geom_point(aes(color = skewness), alpha = 5/10, size=1, shape=".") + 
+  scale_color_continuous(type = "viridis") +
+  labs(x = "Voxelwise mean", y = "Voxelwise SD", color = "Voxelwise\nskewness") + #, title = "Rescaled TBM images") +
+  theme_classic(base_size = 20)
+
+```
+
+```{r function_pred_REV, echo=FALSE, eval = FALSE}
+
+resize_image <- function(mask, img = mask){
+  mask <- drop(mask)
+  img <- drop(img)
+  dims <- dim(mask)
+  
+  if(!all.equal(dim(img), dims)) stop("Mask and img must have the same dimensions!")
+  
+  nonzero_coord <- matrix(NA, nrow = length(dims), ncol = 2)
+  rownames(nonzero_coord) <- paste0("Dim", 1:length(dims))
+  colnames(nonzero_coord) <- c("first","last")
+  
+  
+  for(i in 1:length(dims)) nonzero_coord[i,] <- range(which(apply(mask,i,sum) != 0))
+  ###select first and last coordinate for which the sum is non zero
+  
+  resized_array <- (img[,,]*(mask[,,]>0))[nonzero_coord[1,"first"]:nonzero_coord[1,"last"],
+                                          nonzero_coord[2,"first"]:nonzero_coord[2,"last"],
+                                          nonzero_coord[3,"first"]:nonzero_coord[3,"last"]]
+  
+  return(list(array = resized_array, original_coord = nonzero_coord))
+}
+
+calc_projection_Bspl <- function(knot_space, mask_fname){
+  
+  start_time <- Sys.time()
+  mask <- readNIfTI(fname = mask_fname)  %>%
+    magrittr::is_greater_than(0.5)*1      ### to avoid fuzzy boundaries
+  mask_subset <- resize_image(mask)
+  dims_mask <- dim(mask_subset$array)
+  voxel_grid_nonzero_mask<- which(as.vector(mask_subset$array) != 0)
+  
+  basismat_dim1 <- bsplineS(x = 1:dims_mask[1], breaks = c(seq(1,dims_mask[1], by = knot_space), dims_mask[1]), norder=3, nderiv=0, returnMatrix=TRUE)
+  basismat_dim2 <- bsplineS(x = 1:dims_mask[2], breaks = c(seq(1,dims_mask[2], by = knot_space), dims_mask[2]), norder=3, nderiv=0, returnMatrix=TRUE)
+  basismat_dim3 <- bsplineS(x = 1:dims_mask[3], breaks = c(seq(1,dims_mask[3], by = knot_space), dims_mask[3]), norder=3, nderiv=0, returnMatrix=TRUE)
+  
+  design_mat <- spam::kronecker(basismat_dim3, basismat_dim2, make.dimnames = TRUE) %>%
+    spam::kronecker(., basismat_dim1, make.dimnames = TRUE) %>%
+    .[voxel_grid_nonzero_mask, ]  %>%
+    .[, colSums(.) != 0]
+  
+  #design_mat@x[design_mat@x<0.001] <- 0
+  #design_mat <- design_mat[, colSums(design_mat) != 0]
+  
+  cat("The number of basis functions is ", ncol(design_mat),".\n", sep = "")
+  
+  return(list("basis_mat" = design_mat, 
+              "voxel_grid_nonzero_mask" = voxel_grid_nonzero_mask, 
+              "dims_mask" = dims_mask,
+              "mask_subset" = mask_subset))
+}
+
+slices.plot <- function(image.vec, dims = dims_mask, 
+                        voxels = results$voxel_grid_nonzero_mask, 
+                        col.threshold = 0, 
+                        legend.range = range(image.vec), ...){
+  img <- rep(NA, prod(dims_mask))
+  img[voxels] <- image.vec
+  
+  ybr <- seq(legend.range[1], legend.range[2], length.out = 101)
+
+  rc1 <- colorRampPalette(colors = c("blue", "white"), space="Lab")(length(which(ybr < col.threshold)))    
+  rc2 <- colorRampPalette(colors = c("white", "red"), space="Lab")(length(which(ybr > col.threshold))-1)
+  rampcols <- c(rc1, rc2)
+  
+  if(col.threshold == 0){
+    leg.text <- c(format(min(ybr), scientific = TRUE, digits = 3), 
+                  col.threshold, format(max(ybr), scientific = TRUE, digits = 3))
+  } else{
+    leg.text <- c(floor(min(ybr)), col.threshold, ceiling(max(ybr)))
+  }
+  overlay(x = nifti(resize_image(mask, img_template)$array), 
+          y = nifti(array(img, dim = dims_mask)), 
+          plot.type="single", z = seq(16, 136, by = 5), 
+          col.y = scales::alpha(rampcols, 0.45), useRaster = TRUE, oma = c(4,0,0,0))
+  fields::image.plot(legend.only=TRUE, zlim= range(ybr), 
+                     col = rampcols, horizontal = TRUE, 
+                     legend.mar = 1.5, legend.cex=0.5, legend.width = 0.8, 
+                     legend.args = list(text = leg.text,
+                                        col="white", cex=0.7, side = 1, 
+                                        at = c(min(ybr),col.threshold, max(ybr))))
+  #par(xpd = TRUE)
+  #lab_img <- 34 + seq(16, 136, by = 5)
+  #annot_grid <- expand.grid(0.025 + seq(0, 0.95, by = 0.2), seq(0.97, 0.1, by = -0.175))
+  #library(grid)
+  #grid.text(lab_img, x=annot_grid[,1], y=annot_grid[,2],gp=gpar(fontsize=10, cex = 0.9, col = "white"))
+} 
+
+
+fqr_prediction <-  function(train_sub,
+                            test_sub,
+                            data_demo = data_ADNI_bl_817,
+                            pred_table,
+                            qr_pen = "LASSO",
+                            qr_postLASSO = FALSE,
+                            lambda = NULL,
+                            tau_levels = tau_lev,
+                            return_func_coef = FALSE){
+  
+    data_projected_train <- data_projected[train_sub,]
+    data_projected_test <- data_projected[test_sub,]
+    
+    coef_data <- data_projected_train  %>% scale(scale = F)
+    FPCA_mat <- Matrix::tcrossprod(coef_data, basis_W_half) / sqrt(nrow(coef_data) - 1)
+    
+    tmpSVD <- svd(FPCA_mat, nu = 0)  ###, nv = 50
+    values <- tmpSVD$d ^ 2
+
+    ncomp <- which(cumsum(values) / sum(values) >= pve_threshold)[1]
+    vectors <- Matrix::solve(basis_W_half, tmpSVD$v[, 1:ncomp])
+    
+    scores_mat <- data_projected %>%
+      data.matrix(., rownames.force = TRUE) %>%
+      sweep(., 2, colMeans(data_projected_train)) %>%
+      magrittr::multiply_by_matrix(., int_mat) %*% vectors %>%
+      as.matrix()
+    
+    regr_data <- scores_mat %>%
+      as.data.frame(.) %>%
+      tibble::rownames_to_column(., var = "PTID") %>%
+      right_join(data_demo, ., by =  "PTID") %>%
+      select(PTID, AGE, starts_with('V', ignore.case = FALSE)) %>% #PTGENDER2
+      tibble::column_to_rownames(., "PTID")
+    
+    set.seed(657)
+    model_lower <- rqPen::cv.rq.pen(x = as.matrix(regr_data[train_sub, -1]),
+                                    y = regr_data[train_sub, ]$AGE,
+                                    tau = tau_levels[1],
+                                    method = "br",
+                                    penalty = qr_pen#,                                   penVars = 2:(dim(regr_data)[2]-1)
+                                    )
+    
+    model_med <- rqPen::cv.rq.pen(x = as.matrix(regr_data[train_sub, -1]),
+                                  y = regr_data[train_sub, ]$AGE,
+                                  tau = tau_levels[2],
+                                  method = "br",
+                                  penalty = qr_pen#,penVars = 2:(dim(regr_data)[2]-1)
+                                  )
+    
+    model_upper <- rqPen::cv.rq.pen(x = as.matrix(regr_data[train_sub, -1]),
+                                    y = regr_data[train_sub,]$AGE,
+                                    tau = tau_levels[3],
+                                    #lambda = lambda,
+                                    method = "br",
+                                    penalty = qr_pen#,penVars = 2:(dim(regr_data)[2]-1)
+                                    )
+    
+    model_lower_coef <- with(model_lower, models[[which(cv[, 1] == lambda.min)]]$coefficients[-1])
+    model_med_coef <- with(model_med, models[[which(cv[, 1] == lambda.min)]]$coefficients[-1])
+    model_upper_coef <- with(model_upper, models[[which(cv[, 1] == lambda.min)]]$coefficients[-1])
+    
+    lambda_min_med <- model_med$lambda.min
+    
+    if (return_func_coef == TRUE)
+      print(cv_plots(model_med, logLambda = TRUE, loi = NULL))
+    
+    if (qr_postLASSO == TRUE) {
+      model_lower <- model_lower_coef %>%
+        subset(., !not(.)) %>%
+        when(length(names(.)) < 1  ~ 1, ~ names(.)) %>%
+        paste(., collapse = "+") %>%
+        paste("AGE ~ ", .) %>%
+        formula(.) %>%
+        rq(., tau = tau_lev[1], data = regr_data[train_sub,])
+      
+      model_med <- model_med_coef %>%
+        subset(., !not(.)) %>%
+        when(length(names(.)) < 1  ~ 1, ~ names(.))  %>%      
+        paste(., collapse = "+") %>%
+        paste("AGE ~ ", .) %>%
+        formula(.) %>%
+        rq(., tau = tau_lev[2], data = regr_data[train_sub,])
+      
+      model_upper <- model_upper_coef %>%
+        subset(., !not(.)) %>%
+        when(length(names(.)) < 1  ~ 1, ~ names(.))  %>%
+        paste(., collapse = "+") %>%
+        paste("AGE ~ ", .) %>%
+        formula(.) %>%
+        rq(., tau = tau_lev[3], data = regr_data[train_sub,])
+      
+      pred_table[test_sub, 1] <- model_lower %>%
+        predict(newdata = regr_data[test_sub, ])
+      pred_table[test_sub, 2] <- model_med %>%
+        predict(newdata = regr_data[test_sub, ])
+      pred_table[test_sub, 3] <- model_upper %>%
+        predict(newdata = regr_data[test_sub, ])
+      
+    } else {
+      pred_table[test_sub, 1] <- model_lower %>%
+        predict(newx = as.matrix(regr_data[test_sub,-1]))
+      pred_table[test_sub, 2] <- model_med %>%
+        predict(newx = as.matrix(regr_data[test_sub,-1]))
+      pred_table[test_sub, 3] <- model_upper %>%
+        predict(newx = as.matrix(regr_data[test_sub,-1]))
+    }
+    
+    if (return_func_coef == FALSE)
+      return(pred_table)
+    else
+      return(list(pred_table = pred_table,
+                  no_fpc = ncomp,
+                  evec = vectors,
+                  model_med_coef = as(model_med_coef, "sparseMatrix"),
+                  model_lower_coef = as(model_lower_coef, "sparseMatrix"),
+                  model_upper_coef = as(model_upper_coef, "sparseMatrix"),
+                  lambda_min = lambda_min_med,
+                  no_comp = ncomp
+                  )
+      )
+  }  
+```
+
+
+## Summary statistics maps - ALL SUBJECTS
+
+```{r mask_template}
+load("basis_functions_12mm.RData")
+
+mask <- readNIfTI(fname = "smoothed_mask_125.nii.gz")
+fn = "ADNI_ICBM9P_mni_4step_MDT.img"
+dimscan <- c(220,220,220)
+img_template <- array(readBin(fn, what = "int", n = prod(dimscan), size = 2, signed = FALSE), dim = dimscan)
+```
+
+```{r summary_maps}
+
+slices.plot(stats_scale$center, voxels = voxel_grid_nonzero_mask, col.threshold = 1000, slice_number = FALSE)
+
+slices.plot(stats_scale$scale/1000, voxels = voxel_grid_nonzero_mask,
+            col.threshold = round(quantile(stats_scale$scale/1000, 0.75), 3))
+
+slices.plot(stats_scale$skewness, voxels = voxel_grid_nonzero_mask,
+            col.threshold = round(quantile(stats_scale$skewness, 0.75), 3))
+```
+
+
+## Plots by diagnosis #######################
+
+```{r ADNI_bl}
+load("ADNI_bl.RData")
+
+#all.equal(as.factor(sort(data_ADNI_bl_817$PTID)), data_PTID$V1)
+ADNI_demo <- data_ADNI_bl_817[order(data_ADNI_bl_817$PTID), c("AGE", "Dx")]
+rownames(ADNI_demo) <- sort(data_ADNI_bl_817$PTID)
+
+all.equal(sort(data_ADNI_bl_817$PTID), data_PTID)
+```
+
+```{r summary_stats_Dx, cache=TRUE}
+
+tbm_data_FBM_CN <- big_copy(tbm_data, ind.row = which(ADNI_demo$Dx == "N"))
+stats_scale_CN <- big_scale(center = TRUE, scale = TRUE)(tbm_data_FBM_CN)
+#stats_scale_CN$skewness <- big_apply(tbm_data_FBM_CN, a.FUN = colskew, a.combine = 'c')
+
+tbm_data_FBM_MCI <- big_copy(tbm_data, ind.row = which(ADNI_demo$Dx == "MCI"))
+stats_scale_MCI <- big_scale(center = TRUE, scale = TRUE)(tbm_data_FBM_MCI)
+#stats_scale_MCI$skewness <- big_apply(tbm_data_FBM_MCI, a.FUN = colskew, a.combine = 'c')
+
+tbm_data_FBM_AD <- big_copy(tbm_data, ind.row = which(ADNI_demo$Dx == "AD"))
+stats_scale_AD <- big_scale(center = TRUE, scale = TRUE)(tbm_data_FBM_AD)
+#stats_scale_AD$skewness <- big_apply(tbm_data_FBM_AD, a.FUN = colskew, a.combine = 'c')
+
+```
+
+```{r summary_plots_Dx, fig.show='hold', out.width = "33%"}
+
+theme_set(
+    theme_classic(base_size = 18)
+)
+
+p1 <- ggplot(stats_scale_CN, aes(center,scale)) +
+  geom_bin2d(bins = 600) +
+  #theme(legend.position="bottom") +
+  stat_smooth(color = 2, fill = "yellow") +
+  scale_fill_continuous(type = "viridis", limits = c(0,1300)) +
+  xlim(800, 1650) + 
+  ylim(50, 800) +
+  labs(x = "Voxelwise mean", y = "Voxelwise SD", title = "CN", fill = "Count")
+
+p2 <- ggplot(stats_scale_MCI, aes(center,scale)) +
+  geom_bin2d(bins = 600) +
+  stat_smooth(color = 2, fill = "yellow") +
+  scale_fill_continuous(type = "viridis", limits = c(0,1300)) +
+  xlim(800, 1650) + 
+  ylim(50, 800) +
+  labs(x = "Voxelwise mean", y = "Voxelwise SD", title = "MCI")
+
+p3 <- ggplot(stats_scale_AD, aes(center,scale)) +
+  geom_bin2d(bins = 600) +
+  stat_smooth(color = 2, fill = "yellow") +
+  scale_fill_continuous(type = "viridis", limits = c(0,1300)) +
+  xlim(800, 1650) + 
+  ylim(50, 800) +
+  labs(x = "Voxelwise mean", y = "Voxelwise SD", title = "AD")
+
+cowplot::plot_grid(p1 + theme(legend.position="none")+ 
+                     theme(plot.margin = unit(c(0, 0, 0, 0), "cm")),
+                   p2 + theme(legend.position="none")+ 
+                     theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))+
+                     theme(axis.text.y = element_blank(),
+                           axis.ticks.y = element_blank(),
+                           axis.title.y = element_blank() ),
+                   p3 + theme(legend.position="none")+
+                     theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))+
+                     theme(axis.text.y = element_blank(),
+                           axis.ticks.y = element_blank(),
+                           axis.title.y = element_blank() ),
+                   cowplot::get_legend(p1), 
+                   #labels = c("CN", "MCI", "AD", NULL),
+                   nrow = 1, align = "v",axis = "l", rel_widths = c(1,1,1,0.6))
+```
+
+### CN
+
+```{r summary_maps_CN}
+slices.plot(stats_scale_CN$center, voxels = voxel_grid_nonzero_mask, col.threshold = 1000)
+
+slices.plot(stats_scale_CN$scale/1000, voxels = voxel_grid_nonzero_mask,
+            col.threshold = round(quantile(stats_scale_CN$scale/1000, 0.75), 3))
+
+slices.plot(stats_scale_CN$skewness, voxels = voxel_grid_nonzero_mask,
+            col.threshold = round(quantile(stats_scale_CN$skewness, 0.75), 3))
+```
+
+### MCI
+
+```{r summary_maps_MCI}
+slices.plot(stats_scale_MCI$center, voxels = voxel_grid_nonzero_mask, col.threshold = 1000)
+
+slices.plot(stats_scale_MCI$scale/1000, voxels = voxel_grid_nonzero_mask,
+            col.threshold = round(quantile(stats_scale_MCI$scale/1000, 0.75), 3))
+
+slices.plot(stats_scale_MCI$skewness, voxels = voxel_grid_nonzero_mask,
+            col.threshold = round(quantile(stats_scale_MCI$skewness, 0.75), 3))
+```
+
+### AD
+
+```{r summary_maps_AD}
+slices.plot(stats_scale_AD$center, voxels = voxel_grid_nonzero_mask, col.threshold = 1000)
+
+slices.plot(stats_scale_AD$scale/1000, voxels = voxel_grid_nonzero_mask,
+            col.threshold = round(quantile(stats_scale_AD$scale/1000, 0.75), 3))
+
+slices.plot(stats_scale_AD$skewness, voxels = voxel_grid_nonzero_mask,
+            col.threshold = round(quantile(stats_scale_AD$skewness, 0.75), 3))
+```
+
+
+## Distribution for specifically selected voxels
+
+```{r singlevoxel, fig.show='hold', out.width = "33%" }
+
+voxel_index <- c(which.max(stats_scale$scale), which.min(stats_scale$scale))
+            #,which.max(stats_scale$scale)+56,sample(nrow(stats_scale), size = 2))
+hist(tbm_data[ ,voxel_index[1]], "FD")
+plot(tbm_data[ ,voxel_index[1]], tbm_data[ ,voxel_index[1]+1])
+plot(tbm_data[ ,voxel_index[1]], tbm_data[ ,voxel_index[1]+10])
+hist(tbm_data[ ,voxel_index[2]], "FD")
+plot(tbm_data[ ,voxel_index[2]], tbm_data[ ,voxel_index[2]+1])
+plot(tbm_data[ ,voxel_index[2]], tbm_data[ ,voxel_index[2]+10])
+
+voxel_demo <- data.frame(ADNI_demo, "Voxel" = tbm_data[ ,voxel_index])
+
+
+grid_all <- expand.grid(x = 1:dims_mask[1], y = 1:dims_mask[2], z = 1:dims_mask[3],                      KEEP.OUT.ATTRS = FALSE)
+
+location <- voxel_grid_nonzero_mask[voxel_index] %>%
+  grid_all[., ] 
+
+
+
+#orthographic(oro.nifti::nifti(resize_image(mask, img_template)$array), y = NULL, xyz = as.numeric(location))
+#image(nifti(img_template), z=140, plot.type = "single")
+
+#imgMASKED <- mask_img(img_template, mask, allow.NA = TRUE)
+# image(nifti(imgMASKED), z=140, plot.type = "single")
+# 
+# dim_list <- getEmptyImageDimensions(mask, value = 0, threshold = 0, reorient = FALSE)
+# 
+# grid_orig <- expand.grid("x" = dim_list[[1]], 
+#                    "y" = dim_list[[2]], 
+#                    "z" = dim_list[[3]],
+#                    KEEP.OUT.ATTRS = FALSE)
+
+library(neurobase)
+template_resized <- mask_img(img_template, mask, allow.NA = TRUE) %>%
+  dropEmptyImageDimensions(., value = 0, threshold = 0, reorient = FALSE)
+
+```
+
+```{r index2array, echo=FALSE}
+#index2array <- function(image_vec, dims, voxels){
+  #img <- rep(NA, prod(dims))
+  #img[voxels] <- image_vec
+  #array(img, dim = dims)
+  #grid_all <- expand.grid(x = 1:dims[1], y = 1:dims[2], z = 1:dims[3])
+  #grid_all$value <- NA
+  #grid_all$value[voxels] <- image_vec
+  #if(position <= prod(dims) && position >= 1) print(grid_all[position, ])
+#}
+```
+
+
+## Are these summary statistics smooth?
+
+```{r grid_stats_line, fig.show='hold', out.width = "33%"}
+grid_stats <- matrix(NA, nrow=nrow(grid_all), ncol=3)
+
+grid_stats[voxel_grid_nonzero_mask, 1] <- stats_scale$center
+grid_stats[voxel_grid_nonzero_mask, 2] <- stats_scale$scale 
+grid_stats[voxel_grid_nonzero_mask, 3] <- stats_scale$skewness 
+
+
+as.vector(location[1,2:3])
+grid_stats_line <- which(grid_all$y == location[1,2] & 
+                           grid_all$z == location[1,3]) %>%
+  grid_stats[., ] %>%
+  as.data.frame()
+
+dim(grid_stats_line)
+names(grid_stats_line) <- c("center", "scale", "skewness")
+
+
+
+data_grid <- data.frame(x=1:151, grid_stats_line)
+
+data_grid <- data_grid[complete.cases(data_grid),]
+
+with(data_grid, plot(x,center))
+lines(predict(smooth.spline(data_grid$x, data_grid$center, spar=0.35)), col='red', lwd=2)
+
+with(data_grid, plot(x,scale))
+lines(predict(smooth.spline(data_grid$x, data_grid$scale, spar=0.35)), col='red', lwd=2)
+
+with(data_grid, plot(x,skewness))
+lines(predict(smooth.spline(data_grid$x, data_grid$skewness, spar=0.35)), col='red', lwd=2)
+
+
+```
+
+
+## Distribution for each voxel by diagnosis
+
+```{r voxel_highSD, fig.show='hold', out.width = "33%"}
+my_pal <- c("#009E73", "gold3", "#D55E00")
+#my_pal <- c("darkblue", "gold3", "#D55E00")
+
+theme_set(
+    theme_classic(base_size = 20)
+)
+
+
+old.par <- par(no.readonly = TRUE)
+
+for (i in 1:nrow(location)){
+
+orthographic(template_resized, y = NULL, xyz = as.numeric(location[i,]))
+
+# p1 <- ggplot(data = voxel_demo, aes_string(x=paste0("Voxel.",i),  color = "Dx")) +
+#   geom_density(position="identity", alpha=0.25)+
+#   geom_vline(xintercept=1000, lty = 2) +
+#   scale_color_manual(name = "Diagnosis",
+#                      values = rev(my_pal), guide = guide_legend(reverse = TRUE,
+#                                           override.aes = list(alpha = 1,
+#                                                               size = 0.9)))
+
+
+p2 <- ggplot(data = voxel_demo,  aes_string(x=paste0("Voxel.",i),  color = "Dx")) + 
+  geom_step(stat="ecdf") + 
+  geom_vline(xintercept=1000, lty = 2) +
+  labs(x = paste("TBM at voxel", voxel_index[i]), y = "CDF")+ #,title = "ECDF for different Dx") + 
+  scale_color_manual(name = "Diagnosis",
+                     labels = c("AD", "MCI", "CN"),
+                     values = rev(my_pal), guide = guide_legend(reverse = TRUE,
+                                          override.aes = list(alpha = 1,
+                                                              size = 0.9)))
+
+#print(p1)
+print(p2)
+
+# ggplot(data = voxel_demo, aes(x = Voxel, 
+#                             #fill = fct_rev(Dx), 
+#                             color = Dx #fct_rev(Dx)
+#                             )) + 
+#   stat_bin(geom="step", bins = nclass.FD(voxel_demo$Voxel),
+#            direction="vh",
+#            position = "identity", size = 1.2, alpha = 0.5, pad = TRUE
+#            )+
+#   labs(x = paste("TBM at voxel", voxel_index)) +
+#   scale_color_manual(name = "Diagnosis",
+#                      values = rev(my_pal),
+#                      guide = guide_legend(reverse = TRUE,
+#                                           override.aes = list(alpha = 1,
+#                                                               size = 0.9))) + 
+#   theme_classic() +131
+#   geom_hline(yintercept = 0, colour = "white", size = 1.5) +
+#   expand_limits(y = 0) +
+#   scale_y_continuous(expand = c(0, 0)) +
+#   geom_vline(xintercept = 1000, lty = 2)
+
+}
+```
+
+
+## END
+
+```{r end_time}
+Sys.time() - start_time
+```
+
+```{r, cache = TRUE, echo = FALSE, eval = FALSE}
+ADNI_demo$predicted <- NA
+
+ADNI_demo_CN <- ADNI_demo[which(ADNI_demo$Dx == "N"), ]
+
+set.seed(657)
+
+nfolds <- 10
+foldId <- cut(1:dim(tbm_data_FBM_CN)[1], breaks = nfolds, labels = F) %>%
+      sample()
+table(foldId)
+
+system.time(
+for(i in 1:nfolds){
+  print(i)
+  
+  ADNI_demo_CN$predicted[which(foldId == i)] <- big_spLinReg(tbm_data_FBM_CN,
+               y.train = ADNI_demo_CN$AGE[which(foldId != i)],
+               ind.train = which(foldId != i),
+               alphas = 1, K = 10) %>%
+    predict(., tbm_data_FBM_CN,  ind.row = which(foldId == i))
+}
+
+#summary(model_CN, best.only = TRUE)
+)
+
+with(ADNI_demo_CN, mean(abs(predicted - AGE)))
+```
+
+```{r PCA_TBM, echo = FALSE, eval = FALSE}
+prcomp_CN <- big_SVD(tbm_data_FBM_CN,
+        fun.scaling = big_scale(center = TRUE, scale = FALSE), 
+        k = 100)
+
+plot(prcomp_CN$d^2)
+
+big_center <- big_scale(scale = FALSE)
+meanTBM <- as_FBM(big_center(tbm_data_FBM_CN))
+system.time(covmat2 <- big_crossprodSelf(tbm_data_FBM_CN, 
+                                         fun.scaling = big_scale(center = TRUE)))
+
+
+### diagonal of the product matrix
+cumsum(prcomp_CN$d^2)/sum(diag(covmat))
+```
